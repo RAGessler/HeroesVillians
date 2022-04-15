@@ -16,18 +16,25 @@ def super_list(request):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     elif request.method == 'GET':
-        super_types = SuperType.objects.all()
-        custom_response_dictionary = {}
-        for super_type in super_types:
+        super_type_param = request.query_params.get('type')
+        supers = Super.objects.all()
+        if super_type_param == 'hero':
+            print('heros')
+        elif super_type_param == 'villain':
+            print('villians')
+        else:
+            super_types = SuperType.objects.all()
+            custom_response_dictionary = {}
+            for super_type in super_types:
 
-            supers = Super.objects.filter(super_type_id=super_type.id)
+                supers = Super.objects.filter(super_type_id=super_type.id)
 
-            super_serializer = SuperSerializer(supers, many=True)
+                super_serializer = SuperSerializer(supers, many=True)
 
-            custom_response_dictionary[super_type.type] = [
-            super_serializer.data
-            ]
-        return Response(custom_response_dictionary)
+                custom_response_dictionary[super_type.type] = [
+                super_serializer.data
+                ]
+            return Response(custom_response_dictionary)
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def super_detail(request, pk):
