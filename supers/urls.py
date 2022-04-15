@@ -1,9 +1,7 @@
-import django
-
-
 from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('<int:pk>', views.super_detail)
+    path('', views.super_post),
+    path('<int:pk>/', views.super_detail)
 ]
