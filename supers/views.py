@@ -19,20 +19,29 @@ def super_list(request):
         super_type_param = request.query_params.get('type')
         supers = Super.objects.all()
         if super_type_param == 'hero':
-            print('heros')
+            custom_response_dictionary = {}
+            supers = Super.objects.filter(super_type_id = 1)
+
+            super_serializer = SuperSerializer(supers, many=True)
+
+            custom_response_dictionary['Heroes'] = [
+                super_serializer.data
+            ]
+            return Response(custom_response_dictionary)
+
         elif super_type_param == 'villain':
-            print('villians')
+            custom_response_dictionary = {}
         else:
             super_types = SuperType.objects.all()
             custom_response_dictionary = {}
             for super_type in super_types:
 
-                supers = Super.objects.filter(super_type_id=super_type.id)
+                supers = Super.objects.filter(super_type_id=super_type.id) #not quite sure what the .id does
 
-                super_serializer = SuperSerializer(supers, many=True)
+                super_serializer = SuperSerializer(supers, many=True) #this serialized everything returned on line 33?
 
                 custom_response_dictionary[super_type.type] = [
-                super_serializer.data
+                super_serializer.data #returns the data from the above serailizer to be displayed?
                 ]
             return Response(custom_response_dictionary)
 
